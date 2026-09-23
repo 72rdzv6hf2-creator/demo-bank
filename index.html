@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DemoBank</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f4f6f8;
+  color: #222;
+}
+
+header {
+  background: #063b2c;
+  color: white;
+  padding: 22px;
+  text-align: center;
+}
+
+.demo-banner {
+  background: #fff3cd;
+  color: #664d03;
+  padding: 10px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 13px;
+}
+
+.container {
+  max-width: 700px;
+  margin: 25px auto;
+  padding: 15px;
+}
+
+.card {
+  background: white;
+  border-radius: 14px;
+  padding: 22px;
+  margin-bottom: 18px;
+  box-shadow: 0 3px 15px rgba(0,0,0,.08);
+}
+
+input {
+  width: 100%;
+  padding: 13px;
+  margin: 7px 0 12px;
+  border: 1px solid #ccc;
+  border-radius: 7px;
+  font-size: 16px;
+}
+
+button {
+  width: 100%;
+  padding: 13px;
+  border: none;
+  border-radius: 7px;
+  background: #087f5b;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+button:hover {
+  opacity: .9;
+}
+
+.balance {
+  font-size: 34px;
+  font-weight: bold;
+  color: #063b2c;
+}
+
+.transaction {
+  display: flex;
+  justify-content: space-between;
+  padding: 13px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.green {
+  color: #087f5b;
+  font-weight: bold;
+}
+
+.red {
+  color: #c92a2a;
+  font-weight: bold;
+}
+
+.small {
+  color: #777;
+  font-size: 13px;
+}
+
+#dashboard {
+  display: none;
+}
+
+#message {
+  text-align: center;
+  margin-top: 12px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>DemoBank</h1>
+  <p>Digital Banking</p>
+</header>
+
+<div class="demo-banner">
+  ⚠️ FICTIONAL EDUCATIONAL DEMO — NEVER ENTER REAL BANKING INFORMATION
+</div>
+
+<div class="container">
+
+<!-- LOGIN -->
+<div class="card" id="login">
+
+  <h2>Welcome back</h2>
+
+  <p class="small">
+    Demo credentials: demo / demo123
+  </p>
+
+  <input id="username"
+         type="text"
+         placeholder="Username"
+         autocomplete="off">
+
+  <input id="password"
+         type="password"
+         placeholder="Demo password"
+         autocomplete="off">
+
+  <button onclick="loginUser()">Log in</button>
+
+  <p id="message"></p>
+
+</div>
+
+
+<!-- DASHBOARD -->
+<div id="dashboard">
+
+  <div class="card">
+
+    <p class="small">Available balance</p>
+
+    <div class="balance" id="balance">
+      €1,250.00
+    </div>
+
+    <p class="small">
+      Demo Current Account •••• 4821
+    </p>
+
+  </div>
+
+
+  <div class="card">
+
+    <h2>Transfer Demo Money</h2>
+
+    <input id="recipient"
+           placeholder="Recipient name">
+
+    <input id="amount"
+           type="number"
+           placeholder="Amount (€)">
+
+    <button onclick="transferMoney()">
+      Make Demo Transfer
+    </button>
+
+    <p id="transferMessage"></p>
+
+  </div>
+
+
+  <div class="card">
+
+    <h2>Recent transactions</h2>
+
+    <div id="transactions">
+
+      <div class="transaction">
+        <span>Demo Salary</span>
+        <span class="green">+€1,500.00</span>
+      </div>
+
+      <div class="transaction">
+        <span>Demo Supermarket</span>
+        <span class="red">-€42.80</span>
+      </div>
+
+      <div class="transaction">
+        <span>Demo Coffee Shop</span>
+        <span class="red">-€4.50</span>
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div class="card">
+
+    <button onclick="logout()">
+      Log out
+    </button>
+
+  </div>
+
+</div>
+
+</div>
+
+
+<script>
+
+let balance = 1250;
+
+function loginUser() {
+
+  const username =
+    document.getElementById("username").value;
+
+  const password =
+    document.getElementById("password").value;
+
+  if (username === "demo" &&
+      password === "demo123") {
+
+    document.getElementById("login")
+      .style.display = "none";
+
+    document.getElementById("dashboard")
+      .style.display = "block";
+
+  } else {
+
+    document.getElementById("message")
+      .textContent =
+      "Demo login: use demo / demo123";
+
+  }
+
+}
+
+
+function transferMoney() {
+
+  const recipient =
+    document.getElementById("recipient").value;
+
+  const amount =
+    Number(document.getElementById("amount").value);
+
+  const message =
+    document.getElementById("transferMessage");
+
+  if (!recipient || !amount || amount <= 0) {
+
+    message.textContent =
+      "Enter a fictional recipient and amount.";
+
+    return;
+  }
+
+  if (amount > balance) {
+
+    message.textContent =
+      "Insufficient demo balance.";
+
+    return;
+  }
+
+  balance -= amount;
+
+  document.getElementById("balance")
+    .textContent =
+    "€" + balance.toFixed(2);
+
+  const transaction =
+    document.createElement("div");
+
+  transaction.className = "transaction";
+
+  transaction.innerHTML =
+    "<span>Transfer to " +
+    recipient +
+    "</span>" +
+    "<span class='red'>-€" +
+    amount.toFixed(2) +
+    "</span>";
+
+  document.getElementById("transactions")
+    .prepend(transaction);
+
+  message.textContent =
+    "Demo transfer completed.";
+
+  document.getElementById("recipient").value = "";
+  document.getElementById("amount").value = "";
+
+}
+
+
+function logout() {
+
+  document.getElementById("dashboard")
+    .style.display = "none";
+
+  document.getElementById("login")
+    .style.display = "block";
+
+  document.getElementById("username").value = "";
+  document.getElementById("password").value = "";
+
+}
+
+</script>
+
+</body>
+</html>
